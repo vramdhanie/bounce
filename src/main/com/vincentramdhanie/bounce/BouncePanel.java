@@ -11,6 +11,8 @@ import java.util.Random;
 public class BouncePanel extends JPanel{
 
 	public static final Color BACKGROUND_COLOUR= Color.GREEN;
+	public static final int REPAINT_SPEED = 30;
+
 	public static final int MAX_BALLS = 30;
 	List<PoolBall> balls;
 
@@ -26,6 +28,9 @@ public class BouncePanel extends JPanel{
 				new Color(ran.nextInt(256), ran.nextInt(256), ran.nextInt(256)));
 			balls.add(p);
 		}
+
+		Thread t = new Thread(new Repainter());
+		t.start();
 	}
 
 	@Override
@@ -35,5 +40,17 @@ public class BouncePanel extends JPanel{
 			ball.draw((Graphics2D)g);
 		}
 	}
-	
+
+	private class Repainter implements Runnable{
+		public void run(){
+			while(true){
+				try{
+					repaint();
+					Thread.sleep(REPAINT_SPEED);
+				}catch(InterruptedException e){}
+
+			}
+		}
+	}
+
 }
